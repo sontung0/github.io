@@ -4,33 +4,42 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Starter Template for Bootstrap</title>
-	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" rel="stylesheet">
+	<title>Todos - RactiveJs</title>
+	<link href="../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="../assets/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
 </head>
 
 <body>
 
 <div class="container">
-	<h1>Bootstrap starter template</h1>
 
-	<form>
-		<div class="form-group">
-			<div class="input-group input-group-lg">
-				<div class="input-group-btn">
-					<button type="button" class="btn btn-default">
-						<span class="glyphicon glyphicon-check"></span>
-					</button>
+	<h1>Todos</h1>
+
+	<div id="todos"></div>
+
+	<script id="todos-template" type="text/ractive">
+		<formAdd on-addItem="addItem" on-toggleAll="toggleAll"></formAdd>
+	</script>
+
+	<script id="form-add-template" type="text/ractive">
+		<form on-submit="submit(event)">
+			<div class="form-group">
+				<div class="input-group input-group-lg">
+					<div class="input-group-btn">
+						<button on-click="toggleAll(event)" type="button" class="btn btn-default">
+							<span class="glyphicon glyphicon-{{selectAll ? 'check' : 'unchecked'}}"></span>
+						</button>
+					</div>
+					<input value="{{item}}" placeholder="What needs to be done?" type="text" class="form-control" required>
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="submit">
+							<span class="glyphicon glyphicon-plus"></span>
+						</button>
+					</span>
 				</div>
-				<input type="text" class="form-control" placeholder="Search for...">
-				<span class="input-group-btn">
-					<button class="btn btn-default" type="submit">
-						<span class="glyphicon glyphicon-plus"></span>
-					</button>
-				</span>
 			</div>
-		</div>
-	</form>
+		</form>
+	</script>
 
 	<ul class="list-group">
 
@@ -68,8 +77,10 @@
 
 </div>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="../assets/jquery/jquery.min.js"></script>
+<script src="../assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="../assets/ractive/ractive.min.js"></script>
+<script src="js.js"></script>
 
 </body>
 </html>
