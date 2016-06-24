@@ -7,6 +7,7 @@
 	<title>Todos - RactiveJs</title>
 	<link href="../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<link href="../assets/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+	<link href="css.css" rel="stylesheet">
 </head>
 
 <body>
@@ -19,20 +20,21 @@
 
 	<script id="todos-template" type="text/ractive">
 		<formAdd on-addItem="addItem" on-toggleAll="toggleAll"></formAdd>
+		<items items="{{items}}"></items>
 	</script>
 
-	<script id="form-add-template" type="text/ractive">
-		<form on-submit="submit(event)">
+    <script id="form-add-template" type="text/ractive">
+		<form on-submit="formSubmit(event)">
 			<div class="form-group">
 				<div class="input-group input-group-lg">
 					<div class="input-group-btn">
-						<button on-click="toggleAll(event)" type="button" class="btn btn-default">
+						<button on-click="toggleAll(event)" type="button" class="btn btn-default" title="Toggle all">
 							<span class="glyphicon glyphicon-{{selectAll ? 'check' : 'unchecked'}}"></span>
 						</button>
 					</div>
-					<input value="{{item}}" placeholder="What needs to be done?" type="text" class="form-control" required>
+					<input value="{{desc}}" placeholder="What needs to be done?" type="text" class="form-control" required>
 					<span class="input-group-btn">
-						<button class="btn btn-default" type="submit">
+						<button class="btn btn-default" type="submit" title="Add">
 							<span class="glyphicon glyphicon-plus"></span>
 						</button>
 					</span>
@@ -41,39 +43,54 @@
 		</form>
 	</script>
 
-	<ul class="list-group">
+	<script id="items-template" type="text/ractive">
+        <ul class="list-group todos-items">
+        {{#items:i}}
+            <li class="list-group-item">
 
-		<li class="list-group-item">
-			<button type="button" class="btn btn-default">
-				<span class="glyphicon glyphicon-check"></span>
-			</button>
-			Cras justo odio
-			<div class="btn-group pull-right">
-				<button type="button" class="btn btn-default">
-					<span class="glyphicon glyphicon-edit"></span>
-				</button>
-				<button type="button" class="btn btn-default">
-					<span class="glyphicon glyphicon-remove"></span>
-				</button>
-			</div>
-			<div class="clearfix"></div>
-		</li>
+                {{#if itemEditing.i === i}}
 
-		<li class="list-group-item">
-			<div class="input-group">
-				<input type="text" class="form-control" placeholder="Search for...">
-				<span class="input-group-btn">
-					<button class="btn btn-default" type="submit">
-						<span class="glyphicon glyphicon-ok"></span>
-					</button>
-				</span>
-			</div>
-		</li>
+                    <form on-submit="submitEditItem(event)">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                               <button on-click="toggle(@keypath+'.completed')" type="button" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-{{completed ? 'check' : 'unchecked'}}"></span>
+                                </button>
+                            </span>
+                            <input value="{{itemEditing.desc}}" type="text" class="form-control" required>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit" title="Submit">
+                                    <span class="glyphicon glyphicon-ok"></span>
+                                </button>
+                                <button on-click="cancelEditItem(event)" class="btn btn-default" type="button" title="Cancel">
+                                    <span class="glyphicon glyphicon-refresh"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </form>
 
-		<li class="list-group-item">Morbi leo risus</li>
-		<li class="list-group-item">Porta ac consectetur ac</li>
-		<li class="list-group-item">Vestibulum at eros</li>
-	</ul>
+                {{else}}
+
+                    <button on-click="toggle(@keypath+'.completed')" type="button" class="btn btn-default">
+                        <span class="glyphicon glyphicon-{{completed ? 'check' : 'unchecked'}}"></span>
+                    </button>
+                    <span on-dblclick="editItem(event, i)" class="item-desc">{{desc}}</span>
+                    <div class="btn-group pull-right">
+                        <button on-click="editItem(event, i)" type="button" class="btn btn-default" title="Edit">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </button>
+                        <button on-click="removeItem(event, i)" type="button" class="btn btn-default" title="Remove">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </div>
+
+                {{/if}}
+
+                <div class="clearfix"></div>
+            </li>
+        {{/items}}
+        </ul>
+	</script>
 
 </div>
 
