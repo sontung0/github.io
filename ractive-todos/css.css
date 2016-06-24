@@ -1,4 +1,13 @@
 .todos-items .item-desc {
     margin-left: 8px;
     font-size: 18px;
+    line-height: 1.33;
+}
+.todos-items .item-desc.completed {
+    color: #a9a9a9;
+    text-decoration: line-through;
+}
+.todos-items .input-group-sm>.form-control {
+    padding: 5px 13px;
+    font-size: 14px;
 }

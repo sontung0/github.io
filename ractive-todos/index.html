@@ -44,42 +44,49 @@
 	</script>
 
 	<script id="items-template" type="text/ractive">
+
         <ul class="list-group todos-items">
-        {{#items:i}}
+        {{#itemsResult}}
             <li class="list-group-item">
 
-                {{#if itemEditing.i === i}}
+                {{#if itemEditing.i === id}}
 
                     <form on-submit="submitEditItem(event)">
-                        <div class="input-group">
+                        <div class="input-group  input-group-sm">
+
                             <span class="input-group-btn">
-                               <button on-click="toggle(@keypath+'.completed')" type="button" class="btn btn-default">
+                               <button on-click="toggleStatusItem(event, id)" type="button" class="btn btn-default">
                                     <span class="glyphicon glyphicon-{{completed ? 'check' : 'unchecked'}}"></span>
                                 </button>
                             </span>
+
                             <input value="{{itemEditing.desc}}" type="text" class="form-control" required>
+
                             <span class="input-group-btn">
-                                <button class="btn btn-default" type="submit" title="Submit">
+                                <button class="btn btn-success" type="submit" title="Submit">
                                     <span class="glyphicon glyphicon-ok"></span>
                                 </button>
                                 <button on-click="cancelEditItem(event)" class="btn btn-default" type="button" title="Cancel">
                                     <span class="glyphicon glyphicon-refresh"></span>
                                 </button>
                             </span>
+
                         </div>
                     </form>
 
                 {{else}}
 
-                    <button on-click="toggle(@keypath+'.completed')" type="button" class="btn btn-default">
+                    <button on-click="toggleStatusItem(event, id)" type="button" class="btn btn-default btn-sm">
                         <span class="glyphicon glyphicon-{{completed ? 'check' : 'unchecked'}}"></span>
                     </button>
-                    <span on-dblclick="editItem(event, i)" class="item-desc">{{desc}}</span>
+
+                    <span on-dblclick="editItem(event, id)" class="item-desc {{completed ? 'completed' : ''}}">{{desc}}</span>
+
                     <div class="btn-group pull-right">
-                        <button on-click="editItem(event, i)" type="button" class="btn btn-default" title="Edit">
+                        <button on-click="editItem(event, id)" type="button" class="btn btn-default btn-sm" title="Edit">
                             <span class="glyphicon glyphicon-edit"></span>
                         </button>
-                        <button on-click="removeItem(event, i)" type="button" class="btn btn-default" title="Remove">
+                        <button on-click="removeItem(event, id)" type="button" class="btn btn-default btn-sm" title="Remove">
                             <span class="glyphicon glyphicon-remove"></span>
                         </button>
                     </div>
@@ -90,6 +97,30 @@
             </li>
         {{/items}}
         </ul>
+
+        <div class="row">
+
+            <div class="col-md-3">{{count('active')}} items left</div>
+
+            <div class="col-md-6 text-center">
+                <div class="btn-group">
+                {{#filters:filter}}
+                    <button on-click="set('currentFilter', filter)" type="button"
+                        class="btn btn-sm {{currentFilter == filter ? 'btn-primary' : 'btn-default'}}"
+                        >{{.}}</button>
+                {{/filters}}
+                </div>
+            </div>
+
+            {{#if count('completed')}}
+                <div class="col-md-3 text-right">
+                    <button on-click="clearCompletedItems(event)" type="button" class="btn btn-default btn-sm">Clear completed ({{count('completed')}})</button>
+                </div>
+            {{/if}}
+
+        </div>
+
+
 	</script>
 
 </div>

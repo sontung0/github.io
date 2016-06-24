@@ -30,6 +30,16 @@ var Items = Ractive.extend({
     data: {
         items: [],
         itemEditing: {i: null, desc: null},
+        filters: {all: 'All', active: 'Active', completed: 'Completed'},
+        currentFilter: 'all',
+        count: function (filter) {
+            return this.filterItems(filter).length;
+        },
+    },
+    computed: {
+        itemsResult: function () {
+            return this.filterItems(this.get('currentFilter'));
+        },
     },
     editItem: function (event, i) {
         event.original.preventDefault();
@@ -59,6 +69,23 @@ var Items = Ractive.extend({
 
         this.splice('items', i, 1);
     },
+    toggleStatusItem: function (event, i) {
+        event.original.preventDefault();
+
+        this.toggle('items.'+i+'.completed');
+    },
+    clearCompletedItems: function(event) {
+        event.original.preventDefault();
+
+        this.set('items', this.filterItems('active'));
+    },
+    filterItems: function(filter) {
+        return this.get('items').filter(function(item) {
+            if (filter == 'active') return ! item.completed;
+            if (filter == 'completed') return item.completed;
+            return true;
+        });
+    },
 })
 
 var todos = new Ractive({
@@ -68,10 +95,13 @@ var todos = new Ractive({
 		formAdd: FormAdd,
 		items: Items,
 	},
-	data: {items: [
-        {desc: 'aaaaaaaa'},
-        {desc: 'bbbbbbbb'},
-    ]},
+	data: {
+        items: [
+            {desc: 'Ractive.js doesn\'t take a side in the MVC wars', completed: false},
+            {desc: 'Ractive.js doesn\'t take a side in the MVC wars', completed: true},
+            {desc: 'Ractive.js doesn\'t take a side in the MVC wars', completed: false},
+        ],
+    },
 });
 
 todos.on({
@@ -81,4 +111,12 @@ todos.on({
 	toggleAll: function(status) {
 		this.set('items.*.completed', status);
 	},
+});
+
+todos.observe('items', function (newValue, oldValue, keypath) {
+    this.set('items', newValue.map(function (item, id) {
+        item.id = id;
+
+        return item;
+    }));
 });
