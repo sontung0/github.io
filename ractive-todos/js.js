@@ -97,9 +97,9 @@ var todos = new Ractive({
 	},
 	data: {
         items: [
-            {desc: 'Ractive.js doesn\'t take a side in the MVC wars', completed: false},
-            {desc: 'Ractive.js doesn\'t take a side in the MVC wars', completed: true},
-            {desc: 'Ractive.js doesn\'t take a side in the MVC wars', completed: false},
+            {desc: 'Add a todo', completed: false},
+            {desc: 'Add some more todos', completed: true},
+            {desc: 'Build something with Ractive.js', completed: false},
         ],
     },
 });
