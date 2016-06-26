@@ -23,7 +23,7 @@ var FormAdd = Ractive.extend({
 		this.toggle('selectAll');
 		this.fire('toggleAll', this.get('selectAll'));
 	},
-});
+});;
 
 var Items = Ractive.extend({
     template: '#items-template',
