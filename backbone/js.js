@@ -28,4 +28,4 @@ var Router = Backbone.Router.extend({
 })
 
 var user = new User();
-var router = new Router;;
+var router = new Router;
