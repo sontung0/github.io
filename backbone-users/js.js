@@ -64,7 +64,7 @@ var UserFormView = Backbone.View.extend({
         'submit form': 'submit',
     },
     data: {
-        user: null,
+        user: new User,
         users: null,
         router: null,
     },
