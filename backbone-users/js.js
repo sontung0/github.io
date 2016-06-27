@@ -13,6 +13,9 @@ var Users = Backbone.Collection.extend({
 var UserView = Backbone.View.extend({
     tagName: 'tr',
     template: _.template($('#user-template').html()),
+    events: {
+        'click .act-delete': 'deleteUser',
+    },
 
     initialize: function() {
         this.listenTo(this.model, 'change', this.render);
@@ -22,6 +25,11 @@ var UserView = Backbone.View.extend({
     render: function() {
         this.$el.html(this.template({user: this.model}));
         return this;
+    },
+
+    deleteUser: function(e) {
+        e.preventDefault();
+        this.model.destroy();
     },
 });
 
