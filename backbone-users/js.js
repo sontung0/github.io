@@ -71,7 +71,7 @@ var UserFormView = Backbone.View.extend({
 
     initialize: function(data) {
         _.extend(this.data, data);
-        this.render(null);
+        this.addUser();
     },
 
     render: function() {
@@ -80,7 +80,7 @@ var UserFormView = Backbone.View.extend({
     },
 
     addUser: function() {
-        this.data.user = null;
+        this.data.user = new User;
         return this.render();
     },
 
