@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Todos - RactiveJs</title>
+    <link href="../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="css.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container" id="app">
+
+    <h1>Page title</h1>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th><input type="checkbox"/></th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="users"></tbody>
+    </table>
+
+    <script id="user-template" type="text/template">
+        <td scope="row"><input type="checkbox"/></td>
+        <td><%= name %></td>
+        <td><%= phone %></td>
+        <td>
+            <a href="#" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-edit"></i></a>
+            <a href="#" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-remove"></i></a>
+        </td>
+    </script>
+
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" placeholder="Name">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Phone</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" placeholder="Phone">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<script src="../assets/jquery/jquery.min.js"></script>
+<script src="../assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="../assets/backbone/json2.js"></script>
+<script src="../assets/underscore-min.js"></script>
+<script src="../assets/backbone/backbone-min.js"></script>
+<script src="../assets/backbone/backbone.localStorage.js"></script>
+<script src="js.js"></script>
+
+</body>
+</html>
