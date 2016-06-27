@@ -16,11 +16,20 @@ var User = Backbone.Model.extend({
 
 var Router = Backbone.Router.extend({
 	routes: {
-		'user': 'user',
+		'users': 'users',
 		'user/:id': 'userView',
 	},
-	user: function() {
-		alert('user');
+    execute: function(callback, args, name) {
+        console.log([callback, args, name]);
+
+        if (name != 'users') {
+            this.navigate('users', {trigger: true});
+
+            return false;
+        }
+    },
+	users: function() {
+		alert('users');
 	},
 	userView: function(id) {
 		alert('userView: '+id);
@@ -29,3 +38,7 @@ var Router = Backbone.Router.extend({
 
 var user = new User();
 var router = new Router;
+
+$(function() {
+	Backbone.history.start();
+});
