@@ -74,10 +74,19 @@ var UserFormView = Backbone.View.extend({
         this.render(null);
     },
 
-    render: function(userId) {
-        this.data.user = userId ? this.data.users.get(userId) : new User;
+    render: function() {
         this.$el.html(this.template(this.data));
         return this;
+    },
+
+    addUser: function() {
+        this.data.user = null;
+        return this.render();
+    },
+
+    editUser: function(userId) {
+        this.data.user = this.data.users.get(userId);
+        return this.render();
     },
 
     submit: function(e) {
@@ -100,7 +109,7 @@ var UserFormView = Backbone.View.extend({
         }
 
         this.$('[data-param=error]').html('').hide();
-        this.data.router.redirect('list');
+        this.data.router.navigate('list', {trigger: true, replace: true});
     },
 });
 
@@ -139,16 +148,12 @@ var Router = Backbone.Router.extend({
 
     addUser: function() {
         this.data.usersView.$el.hide();
-        this.data.userFormView.render(null).$el.show();
+        this.data.userFormView.addUser().$el.show();
     },
 
     editUser: function(userId) {
         this.data.usersView.$el.hide();
-        this.data.userFormView.render(userId).$el.show();
-    },
-
-    redirect: function(uri) {
-        this.navigate(uri, {trigger: true, replace: true});
+        this.data.userFormView.editUser(userId).$el.show();
     },
 });
 
