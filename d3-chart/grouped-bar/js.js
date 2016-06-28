@@ -1,9 +1,9 @@
-var margin = {top: 20, right: 20, bottom: 30, left: 40},
+var margin = {top: 50, right: 20, bottom: 30, left: 40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
 var x0 = d3.scale.ordinal()
-    .rangeRoundBands([0, width], .1);
+    .rangeRoundBands([0, width-150], .1);
 
 var x1 = d3.scale.ordinal();
 
@@ -70,6 +70,26 @@ d3.csv("data.csv", function(error, data) {
         .attr("y", function(d) { return y(d.value); })
         .attr("height", function(d) { return height - y(d.value); })
         .style("fill", function(d) { return color(d.name); });
+
+    state.append("text")
+        .attr("x", x1.rangeBand())
+        .attr("y", function(d) {
+            var ys = d.ages.map(function(age) { return y(age.value) });
+            return d3.min(ys)-25;
+        })
+        .style("text-anchor", "middle")
+        .text(function(d) { return d.State; });
+
+    state.append("text")
+        .attr("x", x1.rangeBand())
+        .attr("y", function(d) {
+            var ys = d.ages.map(function(age) { return y(age.value) });
+            return d3.min(ys)-10;
+        })
+        .style("text-anchor", "middle")
+        .text(function(d) {
+            return _.pluck(d.ages, 'value');
+        });
 
     var legend = svg.selectAll(".legend")
         .data(ageNames.slice().reverse())
