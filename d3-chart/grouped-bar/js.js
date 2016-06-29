@@ -1,9 +1,9 @@
-var margin = {top: 50, right: 20, bottom: 30, left: 40},
+var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
 var x0 = d3.scale.ordinal()
-    .rangeRoundBands([0, width-150], .1);
+    .rangeRoundBands([0, width]);
 
 var x1 = d3.scale.ordinal();
 
@@ -11,7 +11,7 @@ var y = d3.scale.linear()
     .range([height, 0]);
 
 var color = d3.scale.ordinal()
-    .range(["blue", "red"]);
+    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
 
 var xAxis = d3.svg.axis()
     .scale(x0)
@@ -71,26 +71,6 @@ d3.csv("data.csv", function(error, data) {
         .attr("height", function(d) { return height - y(d.value); })
         .style("fill", function(d) { return color(d.name); });
 
-    state.append("text")
-        .attr("x", x1.rangeBand())
-        .attr("y", function(d) {
-            var ys = d.ages.map(function(age) { return y(age.value) });
-            return d3.min(ys)-25;
-        })
-        .style("text-anchor", "middle")
-        .text(function(d) { return d.State; });
-
-    state.append("text")
-        .attr("x", x1.rangeBand())
-        .attr("y", function(d) {
-            var ys = d.ages.map(function(age) { return y(age.value) });
-            return d3.min(ys)-10;
-        })
-        .style("text-anchor", "middle")
-        .text(function(d) {
-            return _.pluck(d.ages, 'value');
-        });
-
     var legend = svg.selectAll(".legend")
         .data(ageNames.slice().reverse())
         .enter().append("g")
@@ -98,15 +78,16 @@ d3.csv("data.csv", function(error, data) {
         .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
     legend.append("rect")
-        .attr("x", width - 150)
+        .attr("x", width - 18)
         .attr("width", 18)
         .attr("height", 18)
         .style("fill", color);
 
     legend.append("text")
-        .attr("x", width - 128)
+        .attr("x", width - 24)
         .attr("y", 9)
         .attr("dy", ".35em")
-        .style("text-anchor", "start")
+        .style("text-anchor", "end")
         .text(function(d) { return d; });
+
 });

@@ -16,3 +16,8 @@ body {
 .x.axis path {
     display: none;
 }
+
+.x.axis .tick text {
+    text-anchor: start!important;
+}
+
