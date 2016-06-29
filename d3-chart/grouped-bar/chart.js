@@ -21,7 +21,7 @@ function getData() {
 }
 
 function draw(data) {
-    var margin = {top: 50, right: 50, bottom: 50, left: 50},
+    var margin = {top: 50, right: 200, bottom: 50, left: 50},
         width = 960 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
@@ -32,6 +32,10 @@ function draw(data) {
     var x1 = d3.scale.ordinal()
         .rangeRoundBands([0, x0.rangeBand()])
         .domain(_.pluck(_.first(data).items, 'item'));
+
+    var xGroupLabel = d3.scale.ordinal()
+        .rangeRoundBands([0, x0.rangeBand()])
+        .domain([1, 2]);
 
     var y = d3.scale.linear()
         .range([height, 0])
@@ -48,7 +52,7 @@ function draw(data) {
 
     var svg = d3.select("body").append("svg")
         .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("height", height + margin.top + margin.bottom + 500)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -58,6 +62,7 @@ function draw(data) {
         .call(xAxis)
         .selectAll('.tick text')
         .attr({transform: 'rotate(90)', x: 10, y: 0, dy: '.5em'})
+        .style('text-anchor', 'start')
         .text(function(d) {
             var group = _.findWhere(data, {group: d});
             return group.group+' '+ _.pluck(group.items, 'value').join(',');
@@ -67,13 +72,13 @@ function draw(data) {
         .attr("class", "y axis")
         .call(yAxis);
 
-    var state = svg.selectAll(".state")
+    var group = svg.selectAll(".group")
         .data(data)
         .enter().append("g")
-        .attr("class", "state")
+        .attr("class", "group")
         .attr("transform", function(d) { return "translate(" + x0(d.group) + ",0)"; });
 
-    state.selectAll("rect")
+    group.selectAll("rect")
         .data(function(d) { return d.items; })
         .enter().append("rect")
         .attr("width", x1.rangeBand())
@@ -81,12 +86,87 @@ function draw(data) {
         .attr("y", function(d) { return y(d.value); })
         .attr("height", function(d) { return height - y(d.value); })
         .style("fill", function(d) { return d.color; });
+
+    group.append("text")
+        .attr("x", xGroupLabel(2))
+        .attr("y", function(d) {
+            var ys = d.items.map(function(item) { return y(item.value) });
+            return d3.min(ys);
+        })
+        .attr("dy", '-2.5em')
+        .style("text-anchor", "middle")
+        .text(function(d) {return d.group });
+
+    group.append("text")
+        .attr("x", xGroupLabel(2))
+        .attr("y", function(d) {
+            var ys = d.items.map(function(item) { return y(item.value) });
+            return d3.min(ys);
+        })
+        .attr("dy", '-1em')
+        .style("text-anchor", "middle")
+        .text(function(d) {
+            return _.pluck(d.items, 'value');
+        });
+
+    drawListGroups();
+
+    function drawListGroups() {
+        var config = {
+            itemWidth: 20,
+            itemHeight: 20,
+            itemMargin: 5,
+        };
+        var items = _.first(data).items;
+        var groupsWidth = (config.itemHeight+config.itemMargin)*items.length;
+
+        var y = d3.scale.ordinal()
+            .rangeBands([0, groupsWidth])
+            .domain(_.pluck(items, 'item'));
+
+        svg.append("foreignObject")
+            .attr("transform", "translate(" + (width+20) + ",0)")
+            .attr("width", 150)
+            .attr("height", groupsWidth)
+            .append('xhtml:div')
+            .attr("class", "list-groups")
+            .html(function() {
+                var html = '';
+                items.forEach(function(item) {
+                    html += '<div class="group-item">'
+                        +'<span class="group-item-color" style="background-color:'+item.color+';"></span>'
+                        +'<span class="group-item-label">'+item.item+'</span>'
+                        +'</div>';
+                });
+
+                return html;
+            });
+        //
+        //    .attr("class", "list-groups")
+        //    .attr("transform", "translate(" + (width+20) + ",0)")
+        //    .selectAll(".group-item")
+        //    .data(items)
+        //    .enter().append("g")
+        //    .attr("class", "group-item")
+        //    .attr("transform", function(d) { return "translate(0," + y(d.item) + ")" });
+        //
+        //groupItem.append("rect")
+        //    .attr("width", config.itemWidth)
+        //    .attr("height", config.itemHeight)
+        //    .style("fill", function(d) { return d.color });
+        //
+        //groupItem.append("text")
+        //    .attr("x", config.itemWidth+config.itemMargin)
+        //    .attr("x", config.itemWidth+config.itemMargin)
+        //    .text(function(d) { return d.item });
+
+    }
 }
 
 function getValueMax(data) {
     return d3.max(data, function(group) {
         return d3.max(group.items, function(item) {
             return item.value;
-        })
+        });
     });
 }
