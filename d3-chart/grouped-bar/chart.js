@@ -21,16 +21,11 @@ function getData() {
 }
 
 function draw(data) {
-    var svgWidth = window.innerWidth-30;
-    var svgHeight = 1400;
-    var width = 800;
-    var height = 400;
-    var margin = {
-        top: 300,
-        bottom: 50,
-        left: (svgWidth-width)/2,
-        right: this.left,
-    };
+    var svgWidth = window.innerWidth*0.7;
+    var svgHeight = 500;
+    var margin = {top: 50, right: 20, bottom: 150, left: 40};
+    var width = svgWidth - margin.left - margin.right;
+    var height = svgHeight - margin.top - margin.bottom;
 
     var x0 = d3.scale.ordinal()
         .rangeRoundBands([0, width], .1)
@@ -57,7 +52,7 @@ function draw(data) {
         .orient("left")
         .tickFormat(d3.format(".2s"));
 
-    var svg = d3.select("#chart-bars").append("svg")
+    var svg = d3.select("#chart").append("svg")
         .attr("width", svgWidth)
         .attr("height", svgHeight)
         .append("g")
@@ -124,54 +119,20 @@ function draw(data) {
     drawListGroups('right');
 
     function drawListGroups(location) {
-        var groupsVerticalWidth = (svgWidth-width)/2;
-        var groupsVerticalHeight = svgHeight-margin.top;
-        var groupsHorizontalWidth = width;
-        var groupsHorizontalHeight = 200;
         var items = _.first(data).items;
 
-        var foreignObject = svg.append("foreignObject");
-
-        switch (location) {
-            case 'top': {
-                foreignObject.attr("transform", "translate(0,-" + (groupsHorizontalHeight+20) + ")")
-                    .attr("width", groupsHorizontalWidth)
-                    .attr("height", groupsHorizontalHeight);
-                break;
-            }
-            case 'bottom': {
-                foreignObject.attr("transform", "translate(0," + (height+150) + ")")
-                    .attr("width", groupsHorizontalWidth)
-                    .attr("height", groupsHorizontalHeight);
-                break;
-            }
-            case 'left': {
-                foreignObject.attr("transform", "translate(-" + groupsVerticalWidth + ",0)")
-                    .attr("width", groupsVerticalWidth)
-                    .attr("height", groupsVerticalHeight);
-                break;
-            }
-            case 'right': {
-                foreignObject.attr("transform", "translate(" + width + ",0)")
-                    .attr("width", groupsVerticalWidth)
-                    .attr("height", groupsVerticalHeight);
-                break;
-            }
-        }
-
-        foreignObject.append('xhtml:div')
-            .attr("class", "list-groups list-groups-"+location)
-            .html(function() {
-                var html = '';
-                items.forEach(function(item) {
-                    html += '<div class="group-item">'
-                        +'<span class="group-item-color" style="background-color:'+item.color+';"></span>'
-                        +'<span class="group-item-label">'+item.item+'</span>'
-                        +'</div>';
-                });
-
-                return html;
+        d3.select('#chart-bar-groups-'+location).html(function() {
+            var html = '<div class="list-groups">';
+            items.forEach(function(item) {
+                html += '<div class="group-item">'
+                    +'<span class="group-item-color" style="background-color:'+item.color+';"></span>'
+                    +'<span class="group-item-label">'+item.item+'</span>'
+                    +'</div>';
             });
+            html += '</div>';
+
+            return html;
+        });
     }
 
     function getItemValueMax() {

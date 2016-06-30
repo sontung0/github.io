@@ -1,49 +1,49 @@
-body {
+
+.chart-bar {
+    width: 100%;
     font: 10px sans-serif;
 }
-.axis path,
-.axis line {
+.chart-bar tr td {
+    vertical-align: top;
+}
+.chart-bar tr td:nth-child(odd) {
+    width: 200px;
+}
+.chart-bar .axis path,
+.chart-bar .axis line {
     fill: none;
     stroke: #000;
     shape-rendering: crispEdges;
 }
-.axis line {
-    stroke: #999;
+.chart-bar .axis line {
+    stroke: #dbdbdb;
 }
-.bar {
+.chart-bar .bar {
     fill: steelblue;
 }
-.x.axis path {
+.chart-bar .x.axis path {
     display: none;
 }
-
-.group-item {
+.chart-bar .group-item {
     display: block;
     margin: 0 0 5px 0;
 }
-.group-item-color {
+.chart-bar .group-item-color {
     width: 20px;
     height: 20px;
     display: inline-block;
     background: #666;
     float: left;
 }
-.group-item-label {
+.chart-bar .group-item-label {
     padding: 0;
     margin: 0;
     margin-left: 5px;
     line-height: 20px;
     word-break: break-all;
 }
-.list-groups.list-groups-top {
-    margin-bottom: 15px;
-}
-.list-groups.list-groups-bottom {
-    margin-top: 15px;
-}
-.list-groups.list-groups-left {
-    margin-right: 30px;
-}
-.list-groups.list-groups-right {
-    margin-left: 15px;
+.chart-bar #chart-bar-groups-top .list-groups .group-item,
+.chart-bar #chart-bar-groups-bottom .list-groups .group-item {
+    display: inline-block;
+    margin: 0 10px 5px 0;
 }
