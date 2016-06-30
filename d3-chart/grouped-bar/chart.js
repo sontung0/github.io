@@ -21,9 +21,16 @@ function getData() {
 }
 
 function draw(data) {
-    var margin = {top: 50, right: 200, bottom: 50, left: 50},
-        width = 960 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
+    var svgWidth = window.innerWidth-30;
+    var svgHeight = 1400;
+    var width = 800;
+    var height = 400;
+    var margin = {
+        top: 300,
+        bottom: 50,
+        left: (svgWidth-width)/2,
+        right: this.left,
+    };
 
     var x0 = d3.scale.ordinal()
         .rangeRoundBands([0, width], .1)
@@ -39,7 +46,7 @@ function draw(data) {
 
     var y = d3.scale.linear()
         .range([height, 0])
-        .domain([0, getValueMax(data)]);
+        .domain([0, getItemValueMax()]);
 
     var xAxis = d3.svg.axis()
         .scale(x0)
@@ -50,9 +57,9 @@ function draw(data) {
         .orient("left")
         .tickFormat(d3.format(".2s"));
 
-    var svg = d3.select("body").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom + 500)
+    var svg = d3.select("#chart-bars").append("svg")
+        .attr("width", svgWidth)
+        .attr("height", svgHeight)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -70,7 +77,9 @@ function draw(data) {
 
     svg.append("g")
         .attr("class", "y axis")
-        .call(yAxis);
+        .call(yAxis)
+        .selectAll('.tick line')
+        .attr('x2', function(d) { return d ? width : 0 });
 
     var group = svg.selectAll(".group")
         .data(data)
@@ -109,27 +118,49 @@ function draw(data) {
             return _.pluck(d.items, 'value');
         });
 
-    drawListGroups();
+    drawListGroups('top');
+    drawListGroups('bottom');
+    drawListGroups('left');
+    drawListGroups('right');
 
-    function drawListGroups() {
-        var config = {
-            itemWidth: 20,
-            itemHeight: 20,
-            itemMargin: 5,
-        };
+    function drawListGroups(location) {
+        var groupsVerticalWidth = (svgWidth-width)/2;
+        var groupsVerticalHeight = svgHeight-margin.top;
+        var groupsHorizontalWidth = width;
+        var groupsHorizontalHeight = 200;
         var items = _.first(data).items;
-        var groupsWidth = (config.itemHeight+config.itemMargin)*items.length;
 
-        var y = d3.scale.ordinal()
-            .rangeBands([0, groupsWidth])
-            .domain(_.pluck(items, 'item'));
+        var foreignObject = svg.append("foreignObject");
 
-        svg.append("foreignObject")
-            .attr("transform", "translate(" + (width+20) + ",0)")
-            .attr("width", 150)
-            .attr("height", groupsWidth)
-            .append('xhtml:div')
-            .attr("class", "list-groups")
+        switch (location) {
+            case 'top': {
+                foreignObject.attr("transform", "translate(0,-" + (groupsHorizontalHeight+20) + ")")
+                    .attr("width", groupsHorizontalWidth)
+                    .attr("height", groupsHorizontalHeight);
+                break;
+            }
+            case 'bottom': {
+                foreignObject.attr("transform", "translate(0," + (height+150) + ")")
+                    .attr("width", groupsHorizontalWidth)
+                    .attr("height", groupsHorizontalHeight);
+                break;
+            }
+            case 'left': {
+                foreignObject.attr("transform", "translate(-" + groupsVerticalWidth + ",0)")
+                    .attr("width", groupsVerticalWidth)
+                    .attr("height", groupsVerticalHeight);
+                break;
+            }
+            case 'right': {
+                foreignObject.attr("transform", "translate(" + width + ",0)")
+                    .attr("width", groupsVerticalWidth)
+                    .attr("height", groupsVerticalHeight);
+                break;
+            }
+        }
+
+        foreignObject.append('xhtml:div')
+            .attr("class", "list-groups list-groups-"+location)
             .html(function() {
                 var html = '';
                 items.forEach(function(item) {
@@ -141,32 +172,13 @@ function draw(data) {
 
                 return html;
             });
-        //
-        //    .attr("class", "list-groups")
-        //    .attr("transform", "translate(" + (width+20) + ",0)")
-        //    .selectAll(".group-item")
-        //    .data(items)
-        //    .enter().append("g")
-        //    .attr("class", "group-item")
-        //    .attr("transform", function(d) { return "translate(0," + y(d.item) + ")" });
-        //
-        //groupItem.append("rect")
-        //    .attr("width", config.itemWidth)
-        //    .attr("height", config.itemHeight)
-        //    .style("fill", function(d) { return d.color });
-        //
-        //groupItem.append("text")
-        //    .attr("x", config.itemWidth+config.itemMargin)
-        //    .attr("x", config.itemWidth+config.itemMargin)
-        //    .text(function(d) { return d.item });
-
     }
-}
 
-function getValueMax(data) {
-    return d3.max(data, function(group) {
-        return d3.max(group.items, function(item) {
-            return item.value;
+    function getItemValueMax() {
+        return d3.max(data, function(group) {
+            return d3.max(group.items, function(item) {
+                return item.value;
+            });
         });
-    });
+    }
 }

@@ -7,6 +7,9 @@ body {
     stroke: #000;
     shape-rendering: crispEdges;
 }
+.axis line {
+    stroke: #999;
+}
 .bar {
     fill: steelblue;
 }
@@ -16,7 +19,7 @@ body {
 
 .group-item {
     display: block;
-    margin-bottom: 5px;
+    margin: 0 0 5px 0;
 }
 .group-item-color {
     width: 20px;
@@ -31,4 +34,16 @@ body {
     margin-left: 5px;
     line-height: 20px;
     word-break: break-all;
+}
+.list-groups.list-groups-top {
+    margin-bottom: 15px;
+}
+.list-groups.list-groups-bottom {
+    margin-top: 15px;
+}
+.list-groups.list-groups-left {
+    margin-right: 30px;
+}
+.list-groups.list-groups-right {
+    margin-left: 15px;
 }
