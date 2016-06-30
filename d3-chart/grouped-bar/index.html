@@ -5,21 +5,23 @@
     <link rel="stylesheet" href="css.css"/>
 </head>
 <body>
-    <table class="chart-bar">
-        <tr>
-            <td><div id="chart-bar-groups-left"></div></td>
-            <td>
-                <div id="chart-bar-groups-top"></div>
-                <div id="chart"></div>
-                <div id="chart-bar-groups-bottom"></div>
-            </td>
-            <td><div id="chart-bar-groups-right"></div></td>
-        </tr>
-    </table>
-
+    <div class="chart-bar">
+        <h1 id="chart-bar-title"></h1>
+        <table>
+            <tr>
+                <td><div id="chart-bar-groups-left"></div></td>
+                <td>
+                    <div id="chart-bar-groups-top"></div>
+                    <div id="chart"></div>
+                    <div id="chart-bar-groups-bottom"></div>
+                </td>
+                <td><div id="chart-bar-groups-right"></div></td>
+            </tr>
+        </table>
+    </div>
     <script src="../../assets/jquery/jquery.min.js"></script>
     <script src="../../assets/d3js/d3.v3.min.js"></script>
     <script src="../../assets/underscore-min.js"></script>
-    <script src="chart.js"></script>
+    <script src="chart-bar.js"></script>
 </body>
 </html>

@@ -3,6 +3,9 @@
     width: 100%;
     font: 10px sans-serif;
 }
+.chart-bar #chart-bar-title {
+    text-align: center;
+}
 .chart-bar tr td {
     vertical-align: top;
 }
