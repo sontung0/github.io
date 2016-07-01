@@ -50,3 +50,7 @@
     display: inline-block;
     margin: 0 10px 5px 0;
 }
+
+.chart-bar-horizonal .x.axis path {
+    display: block;
+}
